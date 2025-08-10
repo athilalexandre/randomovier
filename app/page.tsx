@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { LoginScreen } from '@/components/LoginScreen'
 import { GroupSelection } from '@/components/GroupSelection'
 import { Dashboard } from '@/components/Dashboard'
+import { FirebaseTest } from '@/components/FirebaseTest'
 
 export default function Home() {
   const { user, loading, error } = useAuth()
@@ -46,16 +47,21 @@ export default function Home() {
     )
   }
 
-  if (!user) {
-    return <LoginScreen />
-  }
-
+  // Temporary: Show Firebase test component
   return (
     <div className="min-h-screen bg-gray-50">
-      {user.groupId ? (
-        <Dashboard />
+      <FirebaseTest />
+      
+      {!user ? (
+        <LoginScreen />
       ) : (
-        <GroupSelection />
+        <div>
+          {user.groupId ? (
+            <Dashboard />
+          ) : (
+            <GroupSelection />
+          )}
+        </div>
       )}
     </div>
   )
