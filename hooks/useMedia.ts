@@ -10,7 +10,7 @@ export function useMedia(groupId: string) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!groupId) {
+    if (!groupId || !db) {
       setMediaList([])
       setLoading(false)
       return
@@ -35,6 +35,10 @@ export function useMedia(groupId: string) {
   }, [groupId])
 
   const addMedia = async (title: string, type: Media['type'], addedBy: string) => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       const mediaData = {
         title,
@@ -53,6 +57,10 @@ export function useMedia(groupId: string) {
   }
 
   const toggleWatched = async (mediaId: string, watched: boolean) => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       const mediaRef = doc(db, 'media', mediaId)
       await updateDoc(mediaRef, { watched })
@@ -63,6 +71,10 @@ export function useMedia(groupId: string) {
   }
 
   const removeMedia = async (mediaId: string) => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       await deleteDoc(doc(db, 'media', mediaId))
     } catch (error) {

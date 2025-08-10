@@ -10,6 +10,10 @@ export function useGroups() {
   const [loading, setLoading] = useState(false)
 
   const createGroup = async (groupName: string, ownerId: string): Promise<string> => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     setLoading(true)
     try {
       // Gerar código de convite único (6 caracteres alfanuméricos)
@@ -34,6 +38,10 @@ export function useGroups() {
   }
 
   const joinGroup = async (inviteCode: string, userId: string): Promise<string> => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     setLoading(true)
     try {
       // Buscar grupo pelo código de convite
@@ -58,6 +66,10 @@ export function useGroups() {
   }
 
   const getGroupById = async (groupId: string): Promise<Group | null> => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       const groupDoc = await getDoc(doc(db, 'groups', groupId))
       if (groupDoc.exists()) {
@@ -71,6 +83,10 @@ export function useGroups() {
   }
 
   const addMemberToGroup = async (groupId: string, userId: string) => {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       const groupRef = doc(db, 'groups', groupId)
       const groupDoc = await getDoc(groupRef)

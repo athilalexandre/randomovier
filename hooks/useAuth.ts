@@ -11,8 +11,13 @@ export function useAuth() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!auth || !db) {
+      setLoading(false)
+      return
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
+      if (firebaseUser && db) {
         // Verificar se o usuário já existe no Firestore
         const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid))
         
@@ -41,6 +46,10 @@ export function useAuth() {
   }, [])
 
   const signInWithGoogle = async () => {
+    if (!auth) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       const provider = new GoogleAuthProvider()
       await signInWithPopup(auth, provider)
@@ -51,6 +60,10 @@ export function useAuth() {
   }
 
   const logout = async () => {
+    if (!auth) {
+      throw new Error('Firebase not initialized')
+    }
+    
     try {
       await signOut(auth)
     } catch (error) {
@@ -60,10 +73,10 @@ export function useAuth() {
   }
 
   const updateUserGroup = async (groupId: string) => {
-    if (!user) return
+    if (!user || !db) return
     
     const updatedUser = { ...user, groupId }
-    await setDoc(doc(db, 'users', user.uid), updatedUser)
+    await setDoc(doc(db!, 'users', user.uid), updatedUser)
     setUser(updatedUser)
   }
 

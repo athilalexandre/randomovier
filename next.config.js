@@ -13,17 +13,9 @@ const nextConfig = {
       }
     }
     
-    // Transpile undici module
-    config.module.rules.push({
-      test: /node_modules\/undici/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env'],
-          plugins: ['@babel/plugin-transform-private-methods', '@babel/plugin-transform-class-properties']
-        }
-      }
-    })
+    // Exclude undici from being processed
+    config.externals = config.externals || []
+    config.externals.push('undici')
     
     return config
   },

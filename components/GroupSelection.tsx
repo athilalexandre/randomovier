@@ -63,7 +63,7 @@ export function GroupSelection() {
               Grupo criado com sucesso!
             </h2>
             <p className="text-gray-600">
-              Seu grupo "{groupName}" foi criado e você já está participando.
+              Seu grupo &ldquo;{groupName}&rdquo; foi criado e você já está participando.
             </p>
           </div>
 
